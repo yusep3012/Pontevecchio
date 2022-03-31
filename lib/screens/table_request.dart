@@ -121,7 +121,8 @@ class TableRequestScreen extends StatelessWidget {
                                 size: 28,
                               ),
                               onPressed: () {
-                                dialogConfirmation(context);
+                                dialogConfirmation(context,
+                                    '¿Está seguro que desea eliminar este producto?');
                               },
                             ),
                           ],
@@ -139,8 +140,11 @@ class TableRequestScreen extends StatelessWidget {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: const Color(0xff2E305F)),
-                            onPressed: () {},
-                            child: const Text('Realizar pedido'))),
+                            onPressed: () {
+                              dialogConfirmation(context,
+                                  '¿Está seguro(a) de pagar el pedido ya?');
+                            },
+                            child: const Text('Pagar pedido'))),
                     const SizedBox(width: 20),
                     const Text('Total',
                         style: TextStyle(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<dynamic> dialogConfirmation(BuildContext context) {
+Future<dynamic> dialogConfirmation(BuildContext context, String text) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -11,9 +11,9 @@ Future<dynamic> dialogConfirmation(BuildContext context) {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
-              Text('¿Está seguro que desea eliminar este producto?'),
-              SizedBox(height: 10),
+            children: [
+              Text(text),
+              const SizedBox(height: 10),
             ],
           ),
           actions: [
