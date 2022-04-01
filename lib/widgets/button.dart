@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  final String nameRoute;
+  final String routeName;
   final String text;
-  const Button({Key? key, required this.nameRoute, required this.text})
+  const Button({Key? key, required this.routeName, required this.text})
       : super(key: key);
 
   @override
@@ -12,8 +12,12 @@ class Button extends StatelessWidget {
       padding: const EdgeInsets.only(top: 25),
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushNamed(context, nameRoute);
+          Navigator.pushNamed(context, routeName);
         },
+        style: ElevatedButton.styleFrom(
+            primary: Colors.indigo[800],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
           child: Text(text, style: const TextStyle(fontSize: 16)),

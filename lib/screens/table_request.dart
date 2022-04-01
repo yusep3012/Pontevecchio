@@ -50,6 +50,7 @@ class TableRequestScreen extends StatelessWidget {
 
   Widget tabBarView(BuildContext context) {
     const textStyle = TextStyle(fontWeight: FontWeight.bold);
+    const int price = 2000;
     return Container(
       padding: const EdgeInsets.only(left: 5, top: 75, right: 5),
       child: TabBarView(children: [
@@ -112,19 +113,9 @@ class TableRequestScreen extends StatelessWidget {
                         trailing: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           spacing: 1,
-                          children: [
-                            const Text('\$1000', style: textStyle),
-                            IconButton(
-                              icon: Icon(
-                                Icons.delete_rounded,
-                                color: Colors.red[400],
-                                size: 28,
-                              ),
-                              onPressed: () {
-                                dialogConfirmation(context,
-                                    '¿Está seguro que desea eliminar este producto?');
-                              },
-                            ),
+                          children: const [
+                            Text('\$$price', style: textStyle),
+                            IconButtonDelete(price: price),
                           ],
                         ),
                       );
@@ -134,23 +125,17 @@ class TableRequestScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const SizedBox(width: 10),
+                  children: const [
+                    SizedBox(width: 10),
                     Expanded(
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: const Color(0xff2E305F)),
-                            onPressed: () {
-                              dialogConfirmation(context,
-                                  '¿Está seguro(a) de pagar el pedido ya?');
-                            },
-                            child: const Text('Pagar pedido'))),
-                    const SizedBox(width: 20),
-                    const Text('Total',
+                      child: OrderButton(price: price),
+                    ),
+                    SizedBox(width: 20),
+                    Text('Total',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 19)),
-                    const SizedBox(width: 20),
-                    const Text('\$100000',
+                    SizedBox(width: 20),
+                    Text('\$$price',
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 19))
                   ],
@@ -234,5 +219,59 @@ class _BottonsState extends State<Bottons> {
     return setState(() {
       _count++;
     });
+  }
+}
+
+class IconButtonDelete extends StatelessWidget {
+  const IconButtonDelete({
+    Key? key,
+    required this.price,
+  }) : super(key: key);
+
+  final int price;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.delete_rounded,
+        color: Colors.red[400],
+        size: 28,
+      ),
+      onPressed: () {
+        dialogConfirmation(
+          context,
+          '¿Está seguro que desea eliminar este producto?',
+          '/successful_payment',
+          false,
+          price,
+        );
+      },
+    );
+  }
+}
+
+class OrderButton extends StatelessWidget {
+  const OrderButton({
+    Key? key,
+    required this.price,
+  }) : super(key: key);
+
+  final int price;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: const Color(0xff2E305F)),
+        onPressed: () {
+          dialogConfirmation(
+            context,
+            '¿Está seguro(a) de pagar el pedido ya?',
+            '/successful_payment',
+            true,
+            price,
+          );
+        },
+        child: const Text('Pagar pedido'));
   }
 }

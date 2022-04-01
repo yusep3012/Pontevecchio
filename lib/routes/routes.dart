@@ -25,11 +25,10 @@ class Routes {
       name: 'register',
       screen: const RegisterScreen(),
     ),
-    // ViewOptions(
-    //   route: '/table_request',
-    //   name: 'order',
-    //   screen: const TableRequestScreen(),
-    // ),
+    ViewOptions(
+        route: '/successful_payment',
+        name: 'successful_payment',
+        screen: const SuccessfulPayment()),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {

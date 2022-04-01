@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Future<dynamic> dialogConfirmation(BuildContext context, String text) {
+Future<dynamic> dialogConfirmation(BuildContext context, String text,
+    String routeName, bool answer, int price) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -24,7 +25,10 @@ Future<dynamic> dialogConfirmation(BuildContext context, String text) {
                   style: TextStyle(color: Colors.red),
                 )),
             TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: answer
+                    ? () => Navigator.pushNamed(context, routeName,
+                        arguments: {'price': price})
+                    : () => Navigator.pop(context),
                 child: const Text('Sí'))
           ],
         );
