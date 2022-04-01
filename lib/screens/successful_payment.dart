@@ -28,7 +28,7 @@ class SuccessfulPayment extends StatelessWidget {
                 ),
               ),
               const Text(
-                '¡Gracias por tu compra!',
+                '¡Gracias por su compra!',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
               ),
               Expanded(

@@ -10,13 +10,13 @@
             "type": "dart"
         },
         {
-            "name": "Pixel 4 XL",
+            "name": "Pixel 2",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5556"
         },
         {
-            "name": "Pixel 2",
+            "name": "Pixel 4 XL",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5554"
