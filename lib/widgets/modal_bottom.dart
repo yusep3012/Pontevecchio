@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pontevecchio/screens/screens.dart';
+
+// Widgets
+import 'package:pontevecchio/widgets/widgets.dart';
 
 Future<dynamic> showModalBottom(BuildContext context, int price) {
   return showModalBottomSheet(
@@ -35,9 +37,8 @@ Future<dynamic> showModalBottom(BuildContext context, int price) {
                               fontSize: 18, fontWeight: FontWeight.w700),
                         ),
                         Text(
-                          // '\$4000',
                           '$price',
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
