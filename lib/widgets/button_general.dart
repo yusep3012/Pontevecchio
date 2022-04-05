@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
+class ButtonGeneral extends StatelessWidget {
   final String routeName;
   final String text;
-  const Button({Key? key, required this.routeName, required this.text})
+  const ButtonGeneral({Key? key, required this.routeName, required this.text})
       : super(key: key);
 
   @override

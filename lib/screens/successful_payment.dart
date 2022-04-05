@@ -50,7 +50,7 @@ class SuccessfulPayment extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const Button(
+              const ButtonGeneral(
                   routeName: '/table_list_screen', text: 'Lista de las mesas'),
               const Spacer()
             ],

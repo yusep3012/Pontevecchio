@@ -42,7 +42,8 @@ class Formulary extends StatelessWidget {
             const UserDates(),
             const Register(),
             Expanded(child: Container()),
-            const Button(routeName: '/table_list_screen', text: 'Ingresar')
+            const ButtonGeneral(
+                routeName: '/table_list_screen', text: 'Ingresar')
           ],
         ),
       ),

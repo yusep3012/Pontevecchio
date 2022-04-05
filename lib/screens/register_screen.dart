@@ -25,8 +25,8 @@ class RegisterScreen extends StatelessWidget {
                   Expanded(flex: 3, child: UserDates()),
                   Expanded(
                       flex: 0,
-                      child:
-                          Button(routeName: '/login_screen', text: 'Registrar'))
+                      child: ButtonGeneral(
+                          routeName: '/login_screen', text: 'Registrar'))
                 ],
               ),
             )
