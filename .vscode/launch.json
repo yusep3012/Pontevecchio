@@ -10,13 +10,13 @@
             "type": "dart"
         },
         {
-            "name": "Pixel 2",
+            "name": "Pixel 4XL",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5556"
         },
         {
-            "name": "Pixel 4 XL",
+            "name": "Pixel 2",
             "request": "launch",
             "type": "dart",
             "deviceId": "emulator-5554"
@@ -27,7 +27,7 @@
             "name": "All Devices",
             "configurations": [
                 "Pixel 2",
-                "Pixel 4 XL"
+                "Pixel 4XL"
             ]
         }
     ]
