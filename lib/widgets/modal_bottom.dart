@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pontevecchio/screens/screens.dart';
 
-Future<dynamic> showModalBottom(BuildContext context) {
+Future<dynamic> showModalBottom(BuildContext context, int price) {
   return showModalBottomSheet(
       isDismissible: false,
       backgroundColor: Colors.grey[200],
@@ -28,14 +28,15 @@ Future<dynamic> showModalBottom(BuildContext context) {
                     ),
                     const SizedBox(height: 20),
                     Row(
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Precio ',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w700),
                         ),
                         Text(
-                          '\$4000',
+                          // '\$4000',
+                          '$price',
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
