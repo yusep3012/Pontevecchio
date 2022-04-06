@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
 
-Future<dynamic> showModalBottom(BuildContext context, int price) {
+Future<dynamic> showModalBottom(
+    BuildContext context, String productName, int price) {
   return showModalBottomSheet(
       isDismissible: false,
       backgroundColor: Colors.grey[200],
@@ -23,10 +24,10 @@ Future<dynamic> showModalBottom(BuildContext context, int price) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Cerveza Pilsen',
-                      style:
-                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                    Text(
+                      productName,
+                      style: const TextStyle(
+                          fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
                     Row(

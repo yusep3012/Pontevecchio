@@ -76,7 +76,8 @@ class TableRequestScreen extends StatelessWidget {
 
   Widget tabBarView(BuildContext context, Map<String, dynamic> data) {
     const textStyle = TextStyle(fontWeight: FontWeight.bold);
-    const int price = 2000;
+    final int price = data['price'];
+    final String productName = data['name'];
     return Container(
       padding: const EdgeInsets.only(left: 5, top: 75, right: 5),
       child: TabBarView(children: [
@@ -85,7 +86,7 @@ class TableRequestScreen extends StatelessWidget {
           children: List.generate(6, (index) {
             return GestureDetector(
               onTap: () {
-                showModalBottom(context, price);
+                showModalBottom(context, productName, price);
               },
               child: Card(
                 color: Colors.white30,
@@ -113,16 +114,16 @@ class TableRequestScreen extends StatelessWidget {
                           child: Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  'Cerveza Pilsen',
-                                  style: TextStyle(
+                                  '${data['name']}',
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),
                                 ),
-                                SizedBox(height: 5),
-                                Text('\$$price',
-                                    style: TextStyle(fontSize: 15)),
+                                const SizedBox(height: 5),
+                                Text('\$${data['price']}',
+                                    style: const TextStyle(fontSize: 15)),
                               ],
                             ),
                           ),
@@ -178,7 +179,7 @@ class TableRequestScreen extends StatelessWidget {
                           spacing: 1,
                           children: [
                             Text('\$${data['price']}', style: textStyle),
-                            const IconButtonDelete(price: price),
+                            IconButtonDelete(price: price),
                           ],
                         ),
                       );
@@ -188,18 +189,18 @@ class TableRequestScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    SizedBox(width: 10),
+                  children: [
+                    const SizedBox(width: 10),
                     Expanded(
                       child: OrderButton(price: price),
                     ),
-                    SizedBox(width: 20),
-                    Text('Total',
+                    const SizedBox(width: 20),
+                    const Text('Total',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 19)),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text('\$$price',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 19))
                   ],
                 ),
