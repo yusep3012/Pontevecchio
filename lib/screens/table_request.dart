@@ -1,30 +1,56 @@
 import 'package:flutter/material.dart';
 
+// DB Firebase
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
 
 class TableRequestScreen extends StatelessWidget {
   final int numberTable;
-  const TableRequestScreen({Key? key, required this.numberTable})
-      : super(key: key);
+  TableRequestScreen({Key? key, required this.numberTable}) : super(key: key);
+
+  final CollectionReference products =
+      FirebaseFirestore.instance.collection('productos');
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xff2E305F),
-      appBar: AppBar(
-        title: Text('Mesa ${numberTable + 1}'),
-      ),
-      body: DefaultTabController(
-        length: 2,
-        child: Stack(
-          children: [
-            const BackgroundWhite(),
-            tabBar(),
-            Expanded(child: tabBarView(context)),
-          ],
-        ),
-      ),
+    return FutureBuilder<DocumentSnapshot>(
+      future: products.doc('p01').get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Error(text: '¡Ups, Algo salió mal!');
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return const Error(text: 'El documento no existe');
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+
+          return Scaffold(
+            backgroundColor: const Color(0xff2E305F),
+            appBar: AppBar(
+              title: Text('Mesa ${numberTable + 1}'),
+            ),
+            body: DefaultTabController(
+              length: 2,
+              child: Stack(
+                children: [
+                  const BackgroundWhite(),
+                  tabBar(),
+                  Expanded(child: tabBarView(context, data)),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return const Loading();
+      },
     );
   }
 
@@ -48,7 +74,7 @@ class TableRequestScreen extends StatelessWidget {
     );
   }
 
-  Widget tabBarView(BuildContext context) {
+  Widget tabBarView(BuildContext context, Map<String, dynamic> data) {
     const textStyle = TextStyle(fontWeight: FontWeight.bold);
     const int price = 2000;
     return Container(
@@ -139,8 +165,8 @@ class TableRequestScreen extends StatelessWidget {
                               child:
                                   Image(image: AssetImage('assets/pilsen.png')),
                             )),
-                        title: const Text(
-                          'Cerveza Pilsen',
+                        title: Text(
+                          '${data['name']}',
                           style: textStyle,
                         ),
                         subtitle: const Text(
@@ -150,9 +176,9 @@ class TableRequestScreen extends StatelessWidget {
                         trailing: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           spacing: 1,
-                          children: const [
-                            Text('\$$price', style: textStyle),
-                            IconButtonDelete(price: price),
+                          children: [
+                            Text('\$${data['price']}', style: textStyle),
+                            const IconButtonDelete(price: price),
                           ],
                         ),
                       );
@@ -182,6 +208,80 @@ class TableRequestScreen extends StatelessWidget {
           ),
         ),
       ]),
+    );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          const BackgroundWhite(),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CircularProgressIndicator(
+                    color: Colors.indigo[900],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                const Text('Cargando...', style: TextStyle(fontSize: 25)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Error extends StatelessWidget {
+  final String text;
+  const Error({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Stack(
+        children: [
+          const BackgroundWhite(),
+          Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              Expanded(
+                  flex: 3,
+                  child: Icon(
+                    Icons.error_outline_rounded,
+                    size: 180,
+                    color: Colors.indigo[900],
+                  )),
+              Expanded(
+                  flex: 3,
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                        fontSize: 28, fontWeight: FontWeight.w600),
+                  )),
+            ],
+          )),
+        ],
+      ),
     );
   }
 }
