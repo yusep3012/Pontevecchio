@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 // Routes
 import 'package:pontevecchio/routes/routes.dart';
 
 // Theme
 import 'package:pontevecchio/theme/theme.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "788579976125",
+    "project_id": "pontevecchio-e6bd9",
+    "storage_bucket": "pontevecchio-e6bd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788579976125:android:e29d3f4865873f514a88d4",
+        "android_client_info": {
+          "package_name": "com.example.pontevecchio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788579976125-o7o39e9fdtfranrl4maiofje9gvbepia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_wsXFBeS0bk1aONOS0z2-fvxdUFdSEIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788579976125-o7o39e9fdtfranrl4maiofje9gvbepia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
