@@ -225,8 +225,6 @@ class TableRequestScreen extends StatelessWidget {
   }
 }
 
-// }
-// }
 class Loading extends StatelessWidget {
   const Loading({
     Key? key,
