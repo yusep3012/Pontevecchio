@@ -8,15 +8,14 @@ import 'package:pontevecchio/widgets/widgets.dart';
 
 class TableRequestScreen extends StatelessWidget {
   final int numberTable;
-  TableRequestScreen({Key? key, required this.numberTable}) : super(key: key);
-
-  // final CollectionReference products =
-  //     FirebaseFirestore.instance.collection('productos');
-  final Stream<QuerySnapshot> products =
-      FirebaseFirestore.instance.collection('productos').snapshots();
+  const TableRequestScreen({Key? key, required this.numberTable})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> products =
+        FirebaseFirestore.instance.collection('productos').snapshots();
+
     return Scaffold(
       backgroundColor: const Color(0xff2E305F),
       appBar: AppBar(
@@ -44,13 +43,6 @@ class TableRequestScreen extends StatelessWidget {
                   const BackgroundWhite(),
                   tabBar(),
                   Expanded(child: tabBarView(context, data)),
-                  // ListView.builder(
-                  //   itemCount: data.size,
-                  //   itemBuilder: (context, index) {
-                  //     return Text(
-                  //         '${data.docs[index]['name']} y precio ${data.docs[index]['price']}');
-                  //   },
-                  // ),
                 ],
               ),
             );
