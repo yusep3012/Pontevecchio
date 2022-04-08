@@ -121,6 +121,8 @@ class TableRequestScreen extends StatelessWidget {
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(height: 5),
                                 Text('\$${data.docs[index]['price']}',
