@@ -10,47 +10,51 @@ class TableRequestScreen extends StatelessWidget {
   final int numberTable;
   TableRequestScreen({Key? key, required this.numberTable}) : super(key: key);
 
-  final CollectionReference products =
-      FirebaseFirestore.instance.collection('productos');
+  // final CollectionReference products =
+  //     FirebaseFirestore.instance.collection('productos');
+  final Stream<QuerySnapshot> products =
+      FirebaseFirestore.instance.collection('productos').snapshots();
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DocumentSnapshot>(
-      future: products.doc('p01').get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return const Error(text: '¡Ups, Algo salió mal!');
-        }
+    return Scaffold(
+      backgroundColor: const Color(0xff2E305F),
+      appBar: AppBar(
+        title: Text('Mesa ${numberTable + 1}'),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: products,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Error(text: '¡Ups, Algo salió mal!');
+              ;
+            }
 
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return const Error(text: 'El documento no existe');
-        }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loading();
+            }
 
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
+            final data = snapshot.requireData;
 
-          return Scaffold(
-            backgroundColor: const Color(0xff2E305F),
-            appBar: AppBar(
-              title: Text('Mesa ${numberTable + 1}'),
-            ),
-            body: DefaultTabController(
+            return DefaultTabController(
               length: 2,
               child: Stack(
                 children: [
                   const BackgroundWhite(),
                   tabBar(),
                   Expanded(child: tabBarView(context, data)),
+                  // ListView.builder(
+                  //   itemCount: data.size,
+                  //   itemBuilder: (context, index) {
+                  //     return Text(
+                  //         '${data.docs[index]['name']} y precio ${data.docs[index]['price']}');
+                  //   },
+                  // ),
                 ],
               ),
-            ),
-          );
-        }
-
-        return const Loading();
-      },
+            );
+          }),
     );
   }
 
@@ -74,16 +78,17 @@ class TableRequestScreen extends StatelessWidget {
     );
   }
 
-  Widget tabBarView(BuildContext context, Map<String, dynamic> data) {
+  Widget tabBarView(BuildContext context, QuerySnapshot<Object?> data) {
     const textStyle = TextStyle(fontWeight: FontWeight.bold);
-    final int price = data['price'];
-    final String productName = data['name'];
+
     return Container(
       padding: const EdgeInsets.only(left: 5, top: 75, right: 5),
       child: TabBarView(children: [
         GridView.count(
           crossAxisCount: 2,
-          children: List.generate(6, (index) {
+          children: List.generate(data.size, (index) {
+            final String productName = data.docs[index]['name'];
+            final int price = data.docs[index]['price'];
             return GestureDetector(
               onTap: () {
                 showModalBottom(context, productName, price);
@@ -92,10 +97,10 @@ class TableRequestScreen extends StatelessWidget {
                 color: Colors.white30,
                 child: Column(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Image(
-                        image: AssetImage('assets/pilsen.png'),
+                        image: NetworkImage('${data.docs[index]['image']}'),
                         width: 34,
                       ),
                     ),
@@ -116,13 +121,13 @@ class TableRequestScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${data['name']}',
+                                  productName,
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(height: 5),
-                                Text('\$${data['price']}',
+                                Text('\$${data.docs[index]['price']}',
                                     style: const TextStyle(fontSize: 15)),
                               ],
                             ),
@@ -150,7 +155,7 @@ class TableRequestScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.builder(
-                    itemCount: 4,
+                    itemCount: data.size,
                     itemBuilder: ((context, index) {
                       return ListTile(
                         leading: Container(
@@ -161,13 +166,14 @@ class TableRequestScreen extends StatelessWidget {
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(5),
                                     topRight: Radius.circular(5))),
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child:
-                                  Image(image: AssetImage('assets/pilsen.png')),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image(
+                                  image: NetworkImage(
+                                      '${data.docs[index]['image']}')),
                             )),
                         title: Text(
-                          '${data['name']}',
+                          '${data.docs[index]['name']}',
                           style: textStyle,
                         ),
                         subtitle: const Text(
@@ -178,8 +184,9 @@ class TableRequestScreen extends StatelessWidget {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           spacing: 1,
                           children: [
-                            Text('\$${data['price']}', style: textStyle),
-                            IconButtonDelete(price: price),
+                            Text('\$${data.docs[index]['price']}',
+                                style: textStyle),
+                            const IconButtonDelete(price: 2000),
                           ],
                         ),
                       );
@@ -189,18 +196,18 @@ class TableRequestScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const SizedBox(width: 10),
+                  children: const [
+                    SizedBox(width: 10),
                     Expanded(
-                      child: OrderButton(price: price),
+                      child: OrderButton(price: 2000),
                     ),
-                    const SizedBox(width: 20),
-                    const Text('Total',
+                    SizedBox(width: 20),
+                    Text('Total',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 19)),
-                    const SizedBox(width: 20),
-                    Text('\$$price',
-                        style: const TextStyle(
+                    SizedBox(width: 20),
+                    Text('\$2000',
+                        style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 19))
                   ],
                 ),
@@ -213,6 +220,8 @@ class TableRequestScreen extends StatelessWidget {
   }
 }
 
+// }
+// }
 class Loading extends StatelessWidget {
   const Loading({
     Key? key,
