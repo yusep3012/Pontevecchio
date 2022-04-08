@@ -27,7 +27,6 @@ class TableRequestScreen extends StatelessWidget {
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               return const Error(text: '¡Ups, Algo salió mal!');
-              ;
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
