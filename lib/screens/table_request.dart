@@ -168,9 +168,9 @@ class TableRequestScreen extends StatelessWidget {
                           '${data.docs[index]['name']}',
                           style: textStyle,
                         ),
-                        subtitle: const Text(
-                          'Cantidad 1',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        subtitle: Text(
+                          'Cantidad ${data.docs[index]['quantity']}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         trailing: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
