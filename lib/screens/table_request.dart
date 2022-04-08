@@ -91,9 +91,13 @@ class TableRequestScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Image(
-                        image: NetworkImage('${data.docs[index]['image']}'),
-                        width: 34,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 115,
+                        child: Image(
+                          image: NetworkImage('${data.docs[index]['image']}'),
+                          fit: BoxFit.fitHeight,
+                        ),
                       ),
                     ),
                     Expanded(
