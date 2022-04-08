@@ -81,6 +81,7 @@ class TableRequestScreen extends StatelessWidget {
           children: List.generate(data.size, (index) {
             final String productName = data.docs[index]['name'];
             final int price = data.docs[index]['price'];
+            final String image = data.docs[index]['image'];
             return GestureDetector(
               onTap: () {
                 showModalBottom(context, productName, price);
@@ -95,7 +96,7 @@ class TableRequestScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 115,
                         child: Image(
-                          image: NetworkImage('${data.docs[index]['image']}'),
+                          image: NetworkImage(image),
                           fit: BoxFit.fitHeight,
                         ),
                       ),
@@ -125,7 +126,7 @@ class TableRequestScreen extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(height: 5),
-                                Text('\$${data.docs[index]['price']}',
+                                Text('\$$price',
                                     style: const TextStyle(fontSize: 15)),
                               ],
                             ),
@@ -155,35 +156,41 @@ class TableRequestScreen extends StatelessWidget {
                 child: ListView.builder(
                     itemCount: data.size,
                     itemBuilder: ((context, index) {
+                      final String productName = data.docs[index]['name'];
+                      final int price = data.docs[index]['price'];
+                      final int quantity = data.docs[index]['quantity'];
+                      final String image = data.docs[index]['image'];
                       return ListTile(
                         leading: Container(
                             width: 50,
                             height: 70,
                             decoration: BoxDecoration(
-                                color: Colors.grey[350],
+                                color: Colors.grey[700],
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(5),
                                     topRight: Radius.circular(5))),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Image(
-                                  image: NetworkImage(
-                                      '${data.docs[index]['image']}')),
+                                image: NetworkImage(image),
+                                fit: BoxFit.fitHeight,
+                              ),
                             )),
                         title: Text(
-                          '${data.docs[index]['name']}',
+                          productName,
                           style: textStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         subtitle: Text(
-                          'Cantidad ${data.docs[index]['quantity']}',
+                          'Cantidad: $quantity',
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         trailing: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           spacing: 1,
                           children: [
-                            Text('\$${data.docs[index]['price']}',
-                                style: textStyle),
+                            Text('\$$price', style: textStyle),
                             const IconButtonDelete(price: 2000),
                           ],
                         ),
