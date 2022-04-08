@@ -11,21 +11,27 @@ class TablesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color(0xff2E305F),
-        appBar: AppBar(
-          title: const Text('Listado de las mesas'),
-        ),
-        body: Stack(
-          children: const [
-            BackgroundWhite(),
-            Padding(
-              padding:
-                  EdgeInsets.only(left: 10, top: 15, right: 10, bottom: 15),
-              child: TablesList(),
-            ),
-          ],
-        ));
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+          backgroundColor: const Color(0xff2E305F),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text('Listado de las mesas'),
+          ),
+          body: Stack(
+            children: const [
+              BackgroundWhite(),
+              Padding(
+                padding:
+                    EdgeInsets.only(left: 10, top: 15, right: 10, bottom: 15),
+                child: TablesList(),
+              ),
+            ],
+          )),
+    );
   }
 }
 
