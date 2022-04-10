@@ -298,10 +298,10 @@ class Error extends StatelessWidget {
   }
 }
 
-class GetPedidos extends StatelessWidget {
+class GetOrders extends StatelessWidget {
   final String documentId;
 
-  GetPedidos(this.documentId);
+  GetOrders(this.documentId);
 
   @override
   Widget build(BuildContext context) {
@@ -325,7 +325,7 @@ class GetPedidos extends StatelessWidget {
               snapshot.data!.data() as Map<String, dynamic>;
 
           return Text(
-            "${data['productos']}",
+            "${data['pedidos']}",
             style: TextStyle(fontSize: 20),
           );
           // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
