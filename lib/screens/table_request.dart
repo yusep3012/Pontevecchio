@@ -47,6 +47,8 @@ class TableRequestScreen extends StatelessWidget {
             );
           }),
     );
+
+    // return Scaffold(body: Center(child: GetPedidos('zL2jDQjA8MLIiAPEzJql')));
   }
 
 // === TABBAR ===
@@ -294,6 +296,122 @@ class Error extends StatelessWidget {
           )),
         ],
       ),
+    );
+  }
+}
+
+class GetPedidos extends StatelessWidget {
+  final String documentId;
+
+  GetPedidos(this.documentId);
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference pedidos =
+        FirebaseFirestore.instance.collection('pedidos');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: pedidos.doc(documentId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          print('DATAAAAAAAA $data');
+          return Text(
+            "${data['productos']}",
+            style: TextStyle(fontSize: 20),
+          );
+          // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
+        }
+
+        return Text("loading");
+      },
+    );
+  }
+}
+
+class GetTables extends StatelessWidget {
+  final String documentId;
+
+  GetTables(this.documentId);
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference tables = FirebaseFirestore.instance.collection('mesas');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: tables.doc(documentId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+
+          return Text(
+            "${data['id']}",
+            style: TextStyle(fontSize: 20),
+          );
+          // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
+        }
+
+        return Text("loading");
+      },
+    );
+  }
+}
+
+class GetProducts extends StatelessWidget {
+  final String documentId;
+
+  GetProducts(this.documentId);
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference products =
+        FirebaseFirestore.instance.collection('productos');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: products.doc(documentId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+
+          return Text(
+            "${data}",
+            style: TextStyle(fontSize: 20),
+          );
+          // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
+        }
+
+        return Text("loading");
+      },
     );
   }
 }

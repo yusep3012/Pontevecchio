@@ -30,21 +30,7 @@ Future<dynamic> showModalBottom(
                           fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        const Text(
-                          'Precio ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          '$price',
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Bottons()
+                    Bottons(price: price)
                   ],
                 ),
               ),
