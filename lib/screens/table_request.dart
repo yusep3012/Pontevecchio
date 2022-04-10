@@ -72,6 +72,11 @@ class TableRequestScreen extends StatelessWidget {
   Widget tabBarView(BuildContext context, QuerySnapshot<Object?> data) {
     const textStyle = TextStyle(fontWeight: FontWeight.bold);
 
+    return firstViewTabBarView(data, context, textStyle);
+  }
+
+  Widget firstViewTabBarView(
+      QuerySnapshot<Object?> data, BuildContext context, TextStyle textStyle) {
     return Container(
       padding: const EdgeInsets.only(left: 5, top: 75, right: 5),
       child: TabBarView(children: [
@@ -143,155 +148,84 @@ class TableRequestScreen extends StatelessWidget {
         ),
 
         // SECOND PAGE
-        Container(
-          margin: const EdgeInsets.all(5),
-          padding:
-              const EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 20),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(15)),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    itemCount: data.size,
-                    itemBuilder: ((context, index) {
-                      final String productName = data.docs[index]['name'];
-                      final int price = data.docs[index]['price'];
-                      final int quantity = data.docs[index]['quantity'];
-                      final String image = data.docs[index]['image'];
-                      return ListTile(
-                        leading: Container(
-                            width: 50,
-                            height: 70,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[700],
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image(
-                                image: NetworkImage(image),
-                                fit: BoxFit.fitHeight,
-                              ),
-                            )),
-                        title: Text(
-                          productName,
-                          style: textStyle,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          'Cantidad: $quantity',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        trailing: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 1,
-                          children: [
-                            Text('\$$price', style: textStyle),
-                            const IconButtonDelete(price: 2000),
-                          ],
-                        ),
-                      );
-                    })),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: OrderButton(price: 2000),
-                    ),
-                    SizedBox(width: 20),
-                    Text('Total',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 19)),
-                    SizedBox(width: 20),
-                    Text('\$2000',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 19))
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        secondPageTabBarView(data, textStyle),
       ]),
     );
   }
-}
 
-class Loading extends StatelessWidget {
-  const Loading({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+  Widget secondPageTabBarView(
+      QuerySnapshot<Object?> data, TextStyle textStyle) {
+    return Container(
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 20),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(15)),
+      child: Column(
         children: [
-          const BackgroundWhite(),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircularProgressIndicator(
-                    color: Colors.indigo[900],
-                  ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: data.size,
+                itemBuilder: ((context, index) {
+                  final String productName = data.docs[index]['name'];
+                  final int price = data.docs[index]['price'];
+                  final int quantity = data.docs[index]['quantity'];
+                  final String image = data.docs[index]['image'];
+                  return ListTile(
+                    leading: Container(
+                        width: 50,
+                        height: 70,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[700],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image(
+                            image: NetworkImage(image),
+                            fit: BoxFit.fitHeight,
+                          ),
+                        )),
+                    title: Text(
+                      productName,
+                      style: textStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      'Cantidad: $quantity',
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    trailing: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 1,
+                      children: [
+                        Text('\$$price', style: textStyle),
+                        const IconButtonDelete(price: 2000),
+                      ],
+                    ),
+                  );
+                })),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                SizedBox(width: 10),
+                Expanded(
+                  child: OrderButton(price: 2000),
                 ),
-                const SizedBox(height: 40),
-                const Text('Cargando...', style: TextStyle(fontSize: 25)),
+                SizedBox(width: 20),
+                Text('Total',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
+                SizedBox(width: 20),
+                Text('\$2000',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 19))
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class Error extends StatelessWidget {
-  final String text;
-  const Error({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Stack(
-        children: [
-          const BackgroundWhite(),
-          Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              Expanded(
-                  flex: 3,
-                  child: Icon(
-                    Icons.error_outline_rounded,
-                    size: 180,
-                    color: Colors.indigo[900],
-                  )),
-              Expanded(
-                  flex: 3,
-                  child: Text(
-                    text,
-                    style: const TextStyle(
-                        fontSize: 28, fontWeight: FontWeight.w600),
-                  )),
-            ],
-          )),
         ],
       ),
     );
