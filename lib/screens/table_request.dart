@@ -47,8 +47,6 @@ class TableRequestScreen extends StatelessWidget {
             );
           }),
     );
-
-    // return Scaffold(body: Center(child: GetPedidos('zL2jDQjA8MLIiAPEzJql')));
   }
 
 // === TABBAR ===
@@ -325,7 +323,7 @@ class GetPedidos extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
-          print('DATAAAAAAAA $data');
+
           return Text(
             "${data['productos']}",
             style: TextStyle(fontSize: 20),
@@ -368,7 +366,6 @@ class GetTables extends StatelessWidget {
             "${data['id']}",
             style: TextStyle(fontSize: 20),
           );
-          // return Text("Full Name: ${data['full_name']} ${data['last_name']}");
         }
 
         return Text("loading");
