@@ -1,10 +1,10 @@
 export 'package:pontevecchio/widgets/background_white.dart';
 export 'package:pontevecchio/widgets/background.dart';
-export 'package:pontevecchio/widgets/button_general.dart';
+export 'package:pontevecchio/widgets/general_button.dart';
 export 'package:pontevecchio/widgets/custom_input.dart';
 export 'package:pontevecchio/widgets/dialog.dart';
 export 'package:pontevecchio/widgets/error.dart';
-export 'package:pontevecchio/widgets/icon_delete.dart';
+export 'package:pontevecchio/widgets/delete_icon.dart';
 export 'package:pontevecchio/widgets/loading.dart';
 export 'package:pontevecchio/widgets/logo.dart';
 export 'package:pontevecchio/widgets/modal_bottom.dart';
