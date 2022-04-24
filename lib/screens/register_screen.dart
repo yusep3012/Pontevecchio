@@ -134,6 +134,7 @@ class _RegisterFormState extends State<RegisterForm> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      snackBar(context, 'Usuario registrado');
       Navigator.pushNamed(context, '/login_screen');
     } on FirebaseAuthException catch (e) {
       print(e);

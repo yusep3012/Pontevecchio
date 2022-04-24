@@ -51,7 +51,7 @@ class SuccessfulPayment extends StatelessWidget {
                 ),
               ),
               const ButtonGeneral(
-                  routeName: '/table_list_screen', text: 'Lista de las mesas'),
+                  routeName: '/login_screen', text: 'Lista de las mesas'),
               const Spacer()
             ],
           ),
