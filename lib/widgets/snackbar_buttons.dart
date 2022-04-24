@@ -46,7 +46,7 @@ class _BottonsState extends State<Bottons> {
                   onPressed: () {
                     Navigator.pop(context);
                     _count = 0;
-                    snackBar(context);
+                    snackBar(context, 'Producto agregado');
                   },
                   child: const Text(
                     'Agregar',

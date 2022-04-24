@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBar(
-    BuildContext context) {
+    BuildContext context, String text) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: const Text(
-      'Producto agregado',
+    content: Text(
+      text,
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
     ),
     duration: const Duration(milliseconds: 1500),
     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),

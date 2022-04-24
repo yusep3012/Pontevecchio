@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // Screens
@@ -20,6 +21,11 @@ class TablesScreen extends StatelessWidget {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: const Text('Listado de las mesas'),
+            actions: [
+              IconButton(
+                  onPressed: () => FirebaseAuth.instance.signOut(),
+                  icon: Icon(Icons.logout_outlined))
+            ],
           ),
           body: Stack(
             children: const [

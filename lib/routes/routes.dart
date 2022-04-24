@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // Models
 import 'package:pontevecchio/models/models.dart';
+import 'package:pontevecchio/screens/register_screen.dart';
 
 // Screens
 import 'package:pontevecchio/screens/screens.dart';
