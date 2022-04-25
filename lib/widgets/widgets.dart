@@ -1,7 +1,6 @@
 export 'package:pontevecchio/widgets/background_white.dart';
 export 'package:pontevecchio/widgets/background.dart';
 export 'package:pontevecchio/widgets/general_button.dart';
-export 'package:pontevecchio/widgets/custom_input.dart';
 export 'package:pontevecchio/widgets/dialog.dart';
 export 'package:pontevecchio/widgets/error.dart';
 export 'package:pontevecchio/widgets/delete_icon.dart';
@@ -11,4 +10,3 @@ export 'package:pontevecchio/widgets/modal_bottom.dart';
 export 'package:pontevecchio/widgets/order_button.dart';
 export 'package:pontevecchio/widgets/snack_bar.dart';
 export 'package:pontevecchio/widgets/snackbar_buttons.dart';
-export 'package:pontevecchio/widgets/user_dates.dart';

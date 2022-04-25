@@ -64,62 +64,40 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     const styleUnderlineInputBorder = UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.white, width: 2));
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 50),
       child: Column(
         children: [
-          TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (email) =>
-                email != null && !EmailValidator.validate(email)
-                    ? 'Ingrese un correo válido'
-                    : null,
-            controller: _emailController,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-                labelText: 'Correo electrónico',
-                labelStyle: TextStyle(color: Colors.white),
-                fillColor: Colors.white,
-                focusedBorder: styleUnderlineInputBorder,
-                enabledBorder: styleUnderlineInputBorder,
-                errorStyle: TextStyle(color: Colors.white, fontSize: 14)),
-          ),
+          InputEmail(
+              emailController: _emailController,
+              styleUnderlineInputBorder: styleUnderlineInputBorder),
           const SizedBox(height: 15),
-          TextFormField(
-            obscureText: true,
-            controller: _passwordController,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (value) => value != null && value.length < 6
-                ? 'Mínimo 6 caracteres'
-                : null,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-                labelText: 'Contraseña',
-                labelStyle: TextStyle(color: Colors.white),
-                fillColor: Colors.white,
-                focusedBorder: styleUnderlineInputBorder,
-                enabledBorder: styleUnderlineInputBorder,
-                errorStyle: TextStyle(color: Colors.white, fontSize: 14)),
-          ),
+          InputPassword(
+              passwordController: _passwordController,
+              styleUnderlineInputBorder: styleUnderlineInputBorder),
           const Register(),
-          Padding(
-            padding: const EdgeInsets.only(top: 25),
-            child: ElevatedButton(
-              onPressed: () {
-                signIn();
-              },
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.indigo[800],
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-                child: Text('Ingresar', style: TextStyle(fontSize: 16)),
-              ),
-            ),
-          ),
+          buttonSignIn(),
         ],
+      ),
+    );
+  }
+
+  Widget buttonSignIn() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 25),
+      child: ElevatedButton(
+        onPressed: () {
+          signIn();
+        },
+        style: ElevatedButton.styleFrom(
+            primary: Colors.indigo[800],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+          child: Text('Ingresar', style: TextStyle(fontSize: 16)),
+        ),
       ),
     );
   }
@@ -133,6 +111,69 @@ class _LoginFormState extends State<LoginForm> {
     } on FirebaseAuthException catch (e) {
       snackBar(context, 'Fallo al autenticar');
     }
+  }
+}
+
+class InputPassword extends StatelessWidget {
+  const InputPassword({
+    Key? key,
+    required TextEditingController passwordController,
+    required this.styleUnderlineInputBorder,
+  })  : _passwordController = passwordController,
+        super(key: key);
+
+  final TextEditingController _passwordController;
+  final UnderlineInputBorder styleUnderlineInputBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      obscureText: true,
+      controller: _passwordController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) =>
+          value != null && value.length < 6 ? 'Mínimo 6 caracteres' : null,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+          labelText: 'Contraseña',
+          labelStyle: const TextStyle(color: Colors.white),
+          fillColor: Colors.white,
+          focusedBorder: styleUnderlineInputBorder,
+          enabledBorder: styleUnderlineInputBorder,
+          errorStyle: const TextStyle(color: Colors.white, fontSize: 14)),
+    );
+  }
+}
+
+class InputEmail extends StatelessWidget {
+  const InputEmail({
+    Key? key,
+    required TextEditingController emailController,
+    required this.styleUnderlineInputBorder,
+  })  : _emailController = emailController,
+        super(key: key);
+
+  final TextEditingController _emailController;
+  final UnderlineInputBorder styleUnderlineInputBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (email) => email != null && !EmailValidator.validate(email)
+          ? 'Ingrese un correo válido'
+          : null,
+      controller: _emailController,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+          labelText: 'Correo electrónico',
+          labelStyle: const TextStyle(color: Colors.white),
+          fillColor: Colors.white,
+          focusedBorder: styleUnderlineInputBorder,
+          enabledBorder: styleUnderlineInputBorder,
+          errorStyle: const TextStyle(color: Colors.white, fontSize: 14)),
+    );
   }
 }
 
