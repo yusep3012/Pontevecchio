@@ -235,7 +235,7 @@ class TableRequestScreen extends StatelessWidget {
 class GetOrders extends StatelessWidget {
   final String documentId;
 
-  GetOrders(this.documentId);
+  const GetOrders({Key? key, required this.documentId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
