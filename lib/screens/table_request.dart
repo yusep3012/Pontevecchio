@@ -91,7 +91,8 @@ class TableRequestScreen extends StatelessWidget {
                 showModalBottom(context, productName, price);
               },
               child: Card(
-                color: Colors.white30,
+                elevation: 10,
+                color: Colors.white,
                 child: Column(
                   children: [
                     Padding(
@@ -119,7 +120,7 @@ class TableRequestScreen extends StatelessWidget {
                               vertical: 8, horizontal: 15),
                           child: Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   productName,

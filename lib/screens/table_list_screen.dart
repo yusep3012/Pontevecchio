@@ -53,7 +53,7 @@ class TablesList extends StatelessWidget {
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
         child: Card(
-          elevation: 5,
+          elevation: 10,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           color: Colors.white,
