@@ -6,11 +6,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
 
-class TableRequestScreen extends StatelessWidget {
+class TableRequestScreen extends StatefulWidget {
   final int numberTable;
   const TableRequestScreen({Key? key, required this.numberTable})
       : super(key: key);
 
+  @override
+  State<TableRequestScreen> createState() => _TableRequestScreenState();
+}
+
+class _TableRequestScreenState extends State<TableRequestScreen> {
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> products =
@@ -19,7 +24,7 @@ class TableRequestScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xff2E305F),
       appBar: AppBar(
-        title: Text('Mesa ${numberTable + 1}'),
+        title: Text('Mesa ${widget.numberTable + 1}'),
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: products,
@@ -50,7 +55,6 @@ class TableRequestScreen extends StatelessWidget {
   }
 
 // === TABBAR ===
-
   Widget tabBar() {
     return Padding(
       padding: const EdgeInsets.all(15),
@@ -156,6 +160,8 @@ class TableRequestScreen extends StatelessWidget {
 
   Widget secondPageTabBarView(
       QuerySnapshot<Object?> data, TextStyle textStyle) {
+    int total = 0;
+
     return Container(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 20),
@@ -171,13 +177,14 @@ class TableRequestScreen extends StatelessWidget {
                   final int price = data.docs[index]['price'];
                   final int quantity = data.docs[index]['quantity'];
                   final String image = data.docs[index]['image'];
+                  total += price;
                   return ListTile(
                     leading: Container(
                         width: 50,
                         height: 70,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[700],
-                            borderRadius: const BorderRadius.only(
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(5),
                                 topRight: Radius.circular(5))),
                         child: Padding(
@@ -201,7 +208,7 @@ class TableRequestScreen extends StatelessWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: 1,
                       children: [
-                        Text('\$$price', style: textStyle),
+                        Text('\$${price * quantity}', style: textStyle),
                         const IconButtonDelete(price: 2000),
                       ],
                     ),
@@ -212,18 +219,19 @@ class TableRequestScreen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                SizedBox(width: 10),
+              children: [
+                const SizedBox(width: 10),
                 Expanded(
-                  child: OrderButton(price: 2000),
+                  child: OrderButton(price: total),
                 ),
-                SizedBox(width: 20),
-                Text('Total',
+                const SizedBox(width: 20),
+                const Text('Total',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
-                SizedBox(width: 20),
-                Text('\$2000',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 19))
+                const SizedBox(width: 20),
+                Text('\$$total',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 19)),
               ],
             ),
           ),
