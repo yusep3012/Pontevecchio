@@ -50,54 +50,6 @@ class TableRequestScreen extends StatelessWidget {
   }
 }
 
-// class TableRequestScreen extends StatefulWidget {
-//   final int numberTable;
-//   const TableRequestScreen({Key? key, required this.numberTable})
-//       : super(key: key);
-
-//   @override
-//   State<TableRequestScreen> createState() => _TableRequestScreenState();
-// }
-
-// class _TableRequestScreenState extends State<TableRequestScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final Stream<QuerySnapshot> products =
-//         FirebaseFirestore.instance.collection('productos').snapshots();
-
-//     return Scaffold(
-//       backgroundColor: const Color(0xff2E305F),
-//       appBar: AppBar(
-//         title: Text('Mesa ${widget.numberTable + 1}'),
-//       ),
-//       body: StreamBuilder<QuerySnapshot>(
-//           stream: products,
-//           builder:
-//               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//             if (snapshot.hasError) {
-//               return const Error(text: '¡Ups, Algo salió mal!');
-//             }
-
-//             if (snapshot.connectionState == ConnectionState.waiting) {
-//               return const Loading();
-//             }
-
-//             final data = snapshot.requireData;
-
-//             return DefaultTabController(
-//               length: 2,
-//               child: Stack(
-//                 children: [
-//                   const BackgroundWhite(),
-//                   tabBar(),
-//                   Expanded(child: tabBarView(context, data)),
-//                 ],
-//               ),
-//             );
-//           }),
-//     );
-//   }
-
 // === TABBAR ===
 Widget tabBar() {
   return Padding(
