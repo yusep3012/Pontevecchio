@@ -45,7 +45,7 @@ class SuccessfulPayment extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: const Text(
-                  'Tu compra ha sido completada satisfactoriamente',
+                  'Su compra ha sido completada satisfactoriamente',
                   style: TextStyle(fontSize: 17),
                   textAlign: TextAlign.center,
                 ),
