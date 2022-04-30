@@ -158,8 +158,8 @@ Widget secondPageTabBarView(QuerySnapshot<Object?> data, TextStyle textStyle) {
 
   for (var i = 0; i < data.size; i++) {
     final int price = data.docs[i]['price'];
-    final int quantity = data.docs[i]['quantity'];
-    total += price * quantity;
+    final int stock = data.docs[i]['stock'];
+    total += price * stock;
   }
 
   return Container(
@@ -175,7 +175,7 @@ Widget secondPageTabBarView(QuerySnapshot<Object?> data, TextStyle textStyle) {
               itemBuilder: ((context, index) {
                 final String productName = data.docs[index]['name'];
                 final int price = data.docs[index]['price'];
-                final int quantity = data.docs[index]['quantity'];
+                final int stock = data.docs[index]['stock'];
                 final String image = data.docs[index]['image'];
                 return ListTile(
                   leading: Container(
@@ -200,15 +200,15 @@ Widget secondPageTabBarView(QuerySnapshot<Object?> data, TextStyle textStyle) {
                     overflow: TextOverflow.ellipsis,
                   ),
                   subtitle: Text(
-                    'Cantidad: $quantity',
+                    'Cantidad: $stock',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   trailing: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 1,
                     children: [
-                      Text('\$${price * quantity}', style: textStyle),
-                      const IconButtonDelete(price: 2000),
+                      Text('\$${price * stock}', style: textStyle),
+                      // const IconButtonDelete(price: 2000),
                     ],
                   ),
                 );
@@ -237,7 +237,6 @@ Widget secondPageTabBarView(QuerySnapshot<Object?> data, TextStyle textStyle) {
     ),
   );
 }
-// }
 
 class GetOrders extends StatelessWidget {
   final String documentId;
