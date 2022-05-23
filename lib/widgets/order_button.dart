@@ -16,6 +16,7 @@ class OrderButton extends StatelessWidget {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: const Color(0xff2E305F)),
         onPressed: () {
+          productList.removeRange(0, productList.length);
           dialogConfirmation(
             context,
             '¿Está seguro(a) de pagar el pedido ya?',

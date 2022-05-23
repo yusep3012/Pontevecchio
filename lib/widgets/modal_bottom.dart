@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pontevecchio/widgets/widgets.dart';
 
 Future<dynamic> showModalBottom(
-    BuildContext context, String productName, int price) {
+    BuildContext context, String productName, int price, String image) {
   return showModalBottomSheet(
       isDismissible: false,
       backgroundColor: Colors.grey[200],
@@ -30,7 +30,11 @@ Future<dynamic> showModalBottom(
                           fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
-                    Bottons(price: price)
+                    Bottons(
+                      price: price,
+                      productName: productName,
+                      image: image,
+                    )
                   ],
                 ),
               ),

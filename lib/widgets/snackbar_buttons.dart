@@ -1,24 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
 
+List<Map<String, dynamic>> productList = [];
+
 class Bottons extends StatefulWidget {
   const Bottons({
     Key? key,
     required this.price,
+    required this.productName,
+    required this.image,
   }) : super(key: key);
 
   final Color color = const Color(0xff2E305F);
   final int price;
+  final String productName;
+  final String image;
 
   @override
   State<Bottons> createState() => _BottonsState();
 }
 
 class _BottonsState extends State<Bottons> {
+  // var db = FirebaseFirestore.instance;
   int _count = 0;
   int result = 0;
+  int quantity = 0;
+  int newQuantity = 0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -44,9 +55,24 @@ class _BottonsState extends State<Bottons> {
                   style: ElevatedButton.styleFrom(
                       primary: const Color(0xff2E305F)),
                   onPressed: () {
-                    Navigator.pop(context);
-                    _count = 0;
-                    snackBar(context, 'Producto agregado');
+                    addProducts();
+
+                    print('TAMAÑO DE LA LISTA: ${productList.length}');
+                    print(productList);
+
+                    // ===========================================
+                    // Create a new order
+                    // final pedido = <String, dynamic>{
+                    //   "name": widget.productName,
+                    //   "price": widget.price,
+                    //   "quantity": _count,
+                    //   "image": widget.image,
+                    // };
+
+                    // Add a new document with a generated ID
+                    // db.collection("pedidos").add(pedido).then(
+                    //     (DocumentReference doc) =>
+                    //         print('DocumentSnapshot added with ID: ${doc.id}'));
                   },
                   child: const Text(
                     'Agregar',
@@ -104,5 +130,44 @@ class _BottonsState extends State<Bottons> {
       }
     });
     return res;
+  }
+
+  void addProducts() {
+    if (_count >= 1) {
+      productList.add({
+        "name": widget.productName,
+        "price": widget.price,
+        "quantity": _count,
+        "image": widget.image,
+      });
+      snackBar(context, 'Producto agregado');
+      Navigator.pop(context);
+    } else {
+      Navigator.pop(context);
+    }
+
+    if (productList.isNotEmpty) {
+      for (var element in productList) {
+        if (element.containsValue(widget.productName)) {
+          quantity = element['quantity'];
+          newQuantity += quantity;
+          print('Contiene CERVEZA: $quantity, $newQuantity');
+        }
+      }
+    }
+
+    if (_count >= 1) {
+      productList
+          .removeWhere((element) => element.containsValue(widget.productName));
+
+      productList.add({
+        "name": widget.productName,
+        "price": widget.price,
+        "quantity": newQuantity,
+        "image": widget.image,
+      });
+    } else {
+      snackBar(context, 'Cantidad errada');
+    }
   }
 }

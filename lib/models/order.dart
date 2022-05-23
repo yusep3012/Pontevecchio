@@ -2,23 +2,28 @@ import 'dart:convert';
 
 import 'package:pontevecchio/models/models.dart';
 
-class User {
-  User(
-      {required this.id,
-      required this.table,
-      required this.waiter,
-      required this.products});
+// To parse this JSON data, do
+//
+//     final order = orderFromMap(jsonString);
+
+class Order {
+  Order({
+    required this.id,
+    required this.table,
+    required this.waiter,
+    required this.products,
+  });
 
   String id;
   String table;
   String waiter;
   List<Product> products;
 
-  factory User.fromJson(String str) => User.fromMap(json.decode(str));
+  factory Order.fromJson(String str) => Order.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromMap(Map<String, dynamic> json) => User(
+  factory Order.fromMap(Map<String, dynamic> json) => Order(
         id: json["id"],
         table: json["table"],
         waiter: json["waiter"],
