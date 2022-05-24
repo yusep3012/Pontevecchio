@@ -24,7 +24,7 @@ class TableRequestScreen extends StatelessWidget {
           children: [
             const BackgroundWhite(),
             tabBar(),
-            Expanded(child: tabBarView(context)),
+            Expanded(child: tabBarView(context, numberTable)),
           ],
         ),
       ),
@@ -51,15 +51,14 @@ Widget tabBar() {
   );
 }
 
-Widget tabBarView(
-  BuildContext context,
-) {
+Widget tabBarView(BuildContext context, int numberTable) {
   const textStyle = TextStyle(fontWeight: FontWeight.bold);
 
-  return firstViewTabBarView(context, textStyle);
+  return firstViewTabBarView(context, textStyle, numberTable);
 }
 
-Widget firstViewTabBarView(BuildContext context, TextStyle textStyle) {
+Widget firstViewTabBarView(
+    BuildContext context, TextStyle textStyle, int numberTable) {
   final Stream<QuerySnapshot> products =
       FirebaseFirestore.instance.collection('productos').snapshots();
 
@@ -148,7 +147,7 @@ Widget firstViewTabBarView(BuildContext context, TextStyle textStyle) {
             ),
 
             // SECOND PAGE
-            secondPageTabBarView(textStyle),
+            secondPageTabBarView(textStyle, numberTable),
           ]),
         );
       });
@@ -156,7 +155,7 @@ Widget firstViewTabBarView(BuildContext context, TextStyle textStyle) {
   //
 }
 
-Widget secondPageTabBarView(TextStyle textStyle) {
+Widget secondPageTabBarView(TextStyle textStyle, int numberTable) {
   return StreamBuilder(
       builder: (BuildContext context, AsyncSnapshot<Object?> snapshot) {
     if (snapshot.hasError) {
@@ -169,9 +168,11 @@ Widget secondPageTabBarView(TextStyle textStyle) {
 
     int total = 0;
 
+    // return Text("data");
+
     for (var i = 0; i < productList.length; i++) {
-      final int price = productList[i]['price'];
-      final int quantity = productList[i]['quantity'];
+      final int price = productList[i].price;
+      final int quantity = productList[i].count;
       total += price * quantity;
     }
 
@@ -186,10 +187,10 @@ Widget secondPageTabBarView(TextStyle textStyle) {
             child: ListView.builder(
                 itemCount: productList.length,
                 itemBuilder: ((context, index) {
-                  final String productName = productList[index]['name'];
-                  final int price = productList[index]['price'];
-                  final int quantity = productList[index]['quantity'];
-                  final String image = productList[index]['image'];
+                  final String productName = productList[index].name;
+                  final int price = productList[index].price;
+                  final int quantity = productList[index].count;
+                  final String image = productList[index].image;
 
                   return ListTile(
                     leading: Container(
@@ -235,7 +236,7 @@ Widget secondPageTabBarView(TextStyle textStyle) {
               children: [
                 const SizedBox(width: 10),
                 Expanded(
-                  child: OrderButton(price: total),
+                  child: OrderButton(price: total, numberTable: numberTable),
                 ),
                 const SizedBox(width: 20),
                 const Text('Total',

@@ -2,13 +2,13 @@ import 'dart:convert';
 
 class Product {
   Product(
-      {required this.id,
+      {required this.count,
       required this.name,
       required this.price,
       required this.image});
 
-  String id;
-  int name;
+  int count;
+  String name;
   int price;
   String image;
 
@@ -17,11 +17,17 @@ class Product {
   String toJson() => json.encode(toMap());
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
-      id: json["id"],
+      count: json["count"],
       name: json["name"],
       price: json["price"],
       image: json["image"]);
 
   Map<String, dynamic> toMap() =>
-      {"id": id, "name": name, "price": price, "image": image};
+      {"count": count, "name": name, "price": price, "image": image};
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return '$name, $count, $price, $image ||';
+  }
 }

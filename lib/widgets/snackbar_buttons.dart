@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+// Models
+import 'package:pontevecchio/models/models.dart';
+
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
 
-List<Map<String, dynamic>> productList = [];
+// List<Map<String, dynamic>> productList = [];
+List<Product> productList = [];
 
 class Bottons extends StatefulWidget {
   const Bottons({
@@ -134,12 +138,11 @@ class _BottonsState extends State<Bottons> {
 
   void addProducts() {
     if (_count >= 1) {
-      productList.add({
-        "name": widget.productName,
-        "price": widget.price,
-        "quantity": _count,
-        "image": widget.image,
-      });
+      productList.add(Product(
+          count: _count,
+          name: widget.productName,
+          price: widget.price,
+          image: widget.image));
       snackBar(context, 'Producto agregado');
       Navigator.pop(context);
     } else {
@@ -148,8 +151,8 @@ class _BottonsState extends State<Bottons> {
 
     if (productList.isNotEmpty) {
       for (var element in productList) {
-        if (element.containsValue(widget.productName)) {
-          quantity = element['quantity'];
+        if (element.name == (widget.productName)) {
+          quantity = element.count;
           newQuantity += quantity;
           print('Contiene CERVEZA: $quantity, $newQuantity');
         }
@@ -158,14 +161,13 @@ class _BottonsState extends State<Bottons> {
 
     if (_count >= 1) {
       productList
-          .removeWhere((element) => element.containsValue(widget.productName));
+          .removeWhere((element) => element.name == (widget.productName));
 
-      productList.add({
-        "name": widget.productName,
-        "price": widget.price,
-        "quantity": newQuantity,
-        "image": widget.image,
-      });
+      productList.add(Product(
+          count: newQuantity,
+          name: widget.productName,
+          price: widget.price,
+          image: widget.image));
     } else {
       snackBar(context, 'Cantidad errada');
     }

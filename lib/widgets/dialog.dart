@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// Widgets
+import 'package:pontevecchio/widgets/widgets.dart';
+
 Future<dynamic> dialogConfirmation(BuildContext context, String text,
     String routeName, bool answer, int price) {
   return showDialog(
@@ -25,10 +28,20 @@ Future<dynamic> dialogConfirmation(BuildContext context, String text,
                   style: TextStyle(color: Colors.red),
                 )),
             TextButton(
-                onPressed: answer
-                    ? () => Navigator.pushNamed(context, routeName,
-                        arguments: {'price': price})
-                    : () => Navigator.pop(context),
+                onPressed: () {
+                  if (answer) {
+                    productList.removeRange(0, productList.length);
+                    Navigator.pushNamed(context, routeName,
+                        arguments: {'price': price});
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+
+                //  answer
+                //     ? () => Navigator.pushNamed(context, routeName,
+                //         arguments: {'price': price})
+                //     : () => Navigator.pop(context),
                 child: const Text('Sí'))
           ],
         );
