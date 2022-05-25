@@ -20,13 +20,13 @@ class IconButtonDelete extends StatelessWidget {
         size: 28,
       ),
       onPressed: () {
-        dialogConfirmation(
-          context,
-          '¿Está seguro que desea eliminar este producto?',
-          '/successful_payment',
-          false,
-          price,
-        );
+        // dialogConfirmation(
+        //   context,
+        //   '¿Está seguro que desea eliminar este producto?',
+        //   '/successful_payment',
+        //   false,
+        //   price,
+        // );
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 // DB Firebase
@@ -156,24 +158,189 @@ Widget firstViewTabBarView(
 }
 
 Widget secondPageTabBarView(TextStyle textStyle, int numberTable) {
-  return StreamBuilder(
-      builder: (BuildContext context, AsyncSnapshot<Object?> snapshot) {
-    if (snapshot.hasError) {
-      return const Error(text: '¡Ups, Algo salió mal!');
-    }
+  return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('pedidos')
+          .where('busy', isEqualTo: true)
+          .where('table', isEqualTo: '${numberTable + 1}')
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Error(text: '¡Ups, Algo salió mal!');
+        }
 
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Loading();
-    }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Loading();
+        }
 
+        final data = snapshot.requireData;
+
+        final length =
+            data.size > 0 ? jsonDecode(data.docs[0]['products']).length : 0;
+
+        int total = 0;
+
+        if (data.size > 0) {
+          for (var i = 0;
+              i < jsonDecode(data.docs[0]['products']).length;
+              i++) {
+            final products = jsonDecode(data.docs[0]['products']);
+            final int price = jsonDecode(products[i])['price'];
+            final int quantity = jsonDecode(products[i])['count'];
+            total += price * quantity;
+          }
+        }
+
+        if (data.size < 1) {
+          return VoidList(textStyle: textStyle, numberTable: numberTable);
+        } else {
+          return FullList(
+            length: length,
+            data: data,
+            total: total,
+            textStyle: textStyle,
+            numberTable: numberTable,
+          );
+        }
+      });
+}
+
+class FullList extends StatelessWidget {
+  const FullList({
+    Key? key,
+    required this.length,
+    required this.data,
+    required this.total,
+    required this.textStyle,
+    required this.numberTable,
+  }) : super(key: key);
+
+  final length;
+  final QuerySnapshot<Object?> data;
+  final int total;
+  final TextStyle textStyle;
+  final int numberTable;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 20),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+                itemCount: length,
+                itemBuilder: ((context, index) {
+                  final products = jsonDecode(data.docs[0]['products']);
+
+                  final productName = (jsonDecode(products[index])['name']);
+
+                  final int price = (jsonDecode(products[index])['price']);
+                  final int quantity = (jsonDecode(products[index])['count']);
+                  final String image = (jsonDecode(products[index])['image']);
+
+                  return ListTile(
+                    leading: Container(
+                        width: 50,
+                        height: 70,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image(
+                            image: NetworkImage(image),
+                            fit: BoxFit.fitHeight,
+                          ),
+                        )),
+                    title: Text(
+                      productName,
+                      style: textStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      'Cantidad: $quantity',
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    trailing: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 1,
+                      children: [
+                        Text('\$${price * quantity}', style: textStyle),
+                        // const IconButtonDelete(price: 2000),
+                      ],
+                    ),
+                  );
+                })),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OrderButton(
+                    price: total,
+                    numberTable: numberTable,
+                    message: '¿Está seguro(a) de pagar el pedido?',
+                    text: 'Pagar',
+                    payBotton: true,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OrderButton(
+                    price: total,
+                    numberTable: numberTable,
+                    message: 'Pedido realizado',
+                    text: 'Pedir',
+                    payBotton: false,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                const Text('Total',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
+                const SizedBox(width: 8),
+                Text('\$$total',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 19)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class VoidList extends StatelessWidget {
+  const VoidList({
+    Key? key,
+    required this.textStyle,
+    required this.numberTable,
+  }) : super(key: key);
+
+  final TextStyle textStyle;
+  final int numberTable;
+
+  @override
+  Widget build(BuildContext context) {
     int total = 0;
 
-    // return Text("data");
-
-    for (var i = 0; i < productList.length; i++) {
-      final int price = productList[i].price;
-      final int quantity = productList[i].count;
-      total += price * quantity;
+    if (productList.isNotEmpty) {
+      for (var i = 0; i < productList.length; i++) {
+        final int price = productList[i].price;
+        final int quantity = productList[i].count;
+        total += price * quantity;
+      }
     }
 
     return Container(
@@ -236,13 +403,29 @@ Widget secondPageTabBarView(TextStyle textStyle, int numberTable) {
               children: [
                 const SizedBox(width: 10),
                 Expanded(
-                  child: OrderButton(price: total, numberTable: numberTable),
+                  child: OrderButton(
+                    price: total,
+                    numberTable: numberTable,
+                    message: '¿Está seguro(a) de pagar el pedido?',
+                    text: 'Pagar',
+                    payBotton: true,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OrderButton(
+                    price: total,
+                    numberTable: numberTable,
+                    message: 'Pedido realizado',
+                    text: 'Pedir',
+                    payBotton: false,
+                  ),
                 ),
                 const SizedBox(width: 20),
                 const Text('Total',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
-                const SizedBox(width: 20),
+                const SizedBox(width: 8),
                 Text('\$$total',
                     style: const TextStyle(
                         fontWeight: FontWeight.w600, fontSize: 19)),
@@ -252,5 +435,5 @@ Widget secondPageTabBarView(TextStyle textStyle, int numberTable) {
         ],
       ),
     );
-  });
+  }
 }

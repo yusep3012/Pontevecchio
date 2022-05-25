@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -48,33 +49,62 @@ class TablesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 5,
-      itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-        child: Card(
-          elevation: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          color: Colors.white,
-          child: ListTile(
-            title: Text('Mesa ${index + 1}'),
-            // Verde disponible, Rojo ocupada, Amarillo reservada
-            leading: const CircleAvatar(
-              backgroundColor: Colors.green,
-            ),
-            trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TableRequestScreen(numberTable: index),
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('pedidos')
+            .where('busy', isEqualTo: true)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Error(text: '¡Ups, Algo salió mal!');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Loading();
+          }
+
+          final data = snapshot.requireData;
+          // print(data.size);
+          // print(data.where((o) => o['category_id'] == '1').toList());
+          // print(data.docs.where((element) => element['table'] == '1').length);
+
+//
+          return ListView.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+              child: Card(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                color: Colors.white,
+                child: ListTile(
+                  title: Text('Mesa ${index + 1}'),
+
+                  // Verde disponible, Amarillo ocupada
+                  leading: CircleAvatar(
+                    backgroundColor: data.size > 0 &&
+                            data.docs
+                                .where((element) =>
+                                    element['table'] == '${index + 1}')
+                                .isNotEmpty
+                        ? Colors.orange
+                        : Colors.green,
+                  ),
+                  trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            TableRequestScreen(numberTable: index),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
+              ),
+            ),
+          );
+        });
   }
 }

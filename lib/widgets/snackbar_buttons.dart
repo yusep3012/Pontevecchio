@@ -29,7 +29,7 @@ class Bottons extends StatefulWidget {
 
 class _BottonsState extends State<Bottons> {
   // var db = FirebaseFirestore.instance;
-  int _count = 0;
+  int _count = 1;
   int result = 0;
   int quantity = 0;
   int newQuantity = 0;

@@ -28,6 +28,6 @@ class Product {
   @override
   String toString() {
     // TODO: implement toString
-    return '$name, $count, $price, $image ||';
+    return '$name, $count, $price, $image';
   }
 }

@@ -1,10 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
 
-Future<dynamic> dialogConfirmation(BuildContext context, String text,
-    String routeName, bool answer, int price) {
+Future<dynamic> dialogConfirmation(
+  BuildContext context,
+  String message,
+  String routeName,
+  bool answer,
+  int price,
+  String idDocumentFirebase,
+) {
+  var db = FirebaseFirestore.instance;
+
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -16,7 +25,7 @@ Future<dynamic> dialogConfirmation(BuildContext context, String text,
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(text),
+              Text(message),
               const SizedBox(height: 10),
             ],
           ),
@@ -31,17 +40,18 @@ Future<dynamic> dialogConfirmation(BuildContext context, String text,
                 onPressed: () {
                   if (answer) {
                     productList.removeRange(0, productList.length);
+
+                    db
+                        .collection("pedidos")
+                        .doc(idDocumentFirebase)
+                        .update({"busy": false, "paidOut": true});
+
                     Navigator.pushNamed(context, routeName,
                         arguments: {'price': price});
                   } else {
                     Navigator.pop(context);
                   }
                 },
-
-                //  answer
-                //     ? () => Navigator.pushNamed(context, routeName,
-                //         arguments: {'price': price})
-                //     : () => Navigator.pop(context),
                 child: const Text('Sí'))
           ],
         );

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pontevecchio/models/models.dart';
+import 'package:uuid/uuid.dart';
 
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
@@ -9,28 +12,61 @@ class OrderButton extends StatelessWidget {
     Key? key,
     required this.price,
     required this.numberTable,
+    required this.message,
+    required this.text,
+    required this.payBotton,
   }) : super(key: key);
 
   final int price;
   final int numberTable;
+  final String message;
+  final String text;
+  final bool payBotton;
 
   @override
   Widget build(BuildContext context) {
+    var uuid = const Uuid();
+    var db = FirebaseFirestore.instance;
+
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: const Color(0xff2E305F)),
         onPressed: () {
-          // productList.removeRange(0, productList.length);
-          print(Order(id: '01', table: numberTable + 1, products: productList)
-              .toString());
+          if (payBotton) {
+            db
+                .collection("pedidos")
+                .where('table', isEqualTo: '${numberTable + 1}')
+                .get()
+                .then((value) => value.docs.forEach((element) {
+                      print(element.id);
+                      dialogConfirmation(
+                        context,
+                        message,
+                        '/successful_payment',
+                        true,
+                        price,
+                        element.id,
+                      );
+                    }))
+                .toString();
+          } else {
+            if (productList.isNotEmpty) {
+              var pedido = {
+                "id": uuid.v4(),
+                "table": '${numberTable + 1}',
+                "products": jsonEncode(productList),
+                "waiter": 'Yusep',
+                "busy": true, //Cambiar a false
+                "paidOut": false, //Cambiar a true
+              };
 
-          dialogConfirmation(
-            context,
-            '¿Está seguro(a) de pagar el pedido ya?',
-            '/successful_payment',
-            true,
-            price,
-          );
+              db.collection("pedidos").add(pedido).then(
+                  (DocumentReference doc) =>
+                      print('DocumentSnapshot added with ID: ${doc.id}'));
+            } else {
+              snackBar(context, 'No hay productos por agregar');
+            }
+          }
         },
-        child: const Text('Pagar pedido'));
+        child: Text(text));
   }
 }
