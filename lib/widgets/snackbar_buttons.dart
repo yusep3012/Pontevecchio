@@ -58,26 +58,7 @@ class _BottonsState extends State<Bottons> {
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: const Color(0xff2E305F)),
-                  onPressed: () {
-                    addProducts();
-
-                    print('TAMAÑO DE LA LISTA: ${productList.length}');
-                    print(productList);
-
-                    // ===========================================
-                    // Create a new order
-                    // final pedido = <String, dynamic>{
-                    //   "name": widget.productName,
-                    //   "price": widget.price,
-                    //   "quantity": _count,
-                    //   "image": widget.image,
-                    // };
-
-                    // Add a new document with a generated ID
-                    // db.collection("pedidos").add(pedido).then(
-                    //     (DocumentReference doc) =>
-                    //         print('DocumentSnapshot added with ID: ${doc.id}'));
-                  },
+                  onPressed: () => addProducts(),
                   child: const Text(
                     'Agregar',
                     style: TextStyle(fontSize: 16),
@@ -154,7 +135,6 @@ class _BottonsState extends State<Bottons> {
         if (element.name == (widget.productName)) {
           quantity = element.count;
           newQuantity += quantity;
-          print('Contiene CERVEZA: $quantity, $newQuantity');
         }
       }
     }
