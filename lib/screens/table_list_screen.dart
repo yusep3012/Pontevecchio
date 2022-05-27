@@ -10,7 +10,6 @@ import 'package:pontevecchio/widgets/widgets.dart';
 
 class TablesScreen extends StatelessWidget {
   const TablesScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -25,7 +24,7 @@ class TablesScreen extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () => FirebaseAuth.instance.signOut(),
-                  icon: Icon(Icons.logout_outlined))
+                  icon: const Icon(Icons.logout_outlined))
             ],
           ),
           body: Stack(
@@ -64,47 +63,47 @@ class TablesList extends StatelessWidget {
           }
 
           final data = snapshot.requireData;
-          // print(data.size);
-          // print(data.where((o) => o['category_id'] == '1').toList());
-          // print(data.docs.where((element) => element['table'] == '1').length);
 
-//
           return ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-              child: Card(
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                color: Colors.white,
-                child: ListTile(
-                  title: Text('Mesa ${index + 1}'),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                  child: Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text('Mesa ${index + 1}'),
 
-                  // Verde disponible, Amarillo ocupada
-                  leading: CircleAvatar(
-                    backgroundColor: data.size > 0 &&
-                            data.docs
-                                .where((element) =>
-                                    element['table'] == '${index + 1}')
-                                .isNotEmpty
-                        ? Colors.orange
-                        : Colors.green,
-                  ),
-                  trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            TableRequestScreen(numberTable: index),
+                      // Verde disponible, Amarillo ocupada
+                      leading: CircleAvatar(
+                        backgroundColor: data.size > 0 &&
+                                data.docs
+                                    .where((element) =>
+                                        element['table'] == '${index + 1}')
+                                    .isNotEmpty
+                            ? Colors.orange
+                            : Colors.green,
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          );
+                      trailing: const Icon(Icons.keyboard_arrow_right_outlined),
+                      onTap: () {
+                        productList.removeRange(0, productList.length);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TableRequestScreen(numberTable: index),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              });
         });
   }
 }

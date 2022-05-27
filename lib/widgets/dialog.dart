@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-// Widgets
-import 'package:pontevecchio/widgets/widgets.dart';
-
 Future<dynamic> dialogConfirmation(
   BuildContext context,
   String message,
@@ -39,8 +36,6 @@ Future<dynamic> dialogConfirmation(
             TextButton(
                 onPressed: () {
                   if (answer) {
-                    productList.removeRange(0, productList.length);
-
                     db
                         .collection("pedidos")
                         .doc(idDocumentFirebase)

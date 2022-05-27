@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 // DB Firebase
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pontevecchio/models/models.dart';
 
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
@@ -178,26 +179,13 @@ Widget secondPageTabBarView(TextStyle textStyle, int numberTable) {
         final length =
             data.size > 0 ? jsonDecode(data.docs[0]['products']).length : 0;
 
-        int total = 0;
-
-        if (data.size > 0) {
-          for (var i = 0;
-              i < jsonDecode(data.docs[0]['products']).length;
-              i++) {
-            final products = jsonDecode(data.docs[0]['products']);
-            final int price = jsonDecode(products[i])['price'];
-            final int quantity = jsonDecode(products[i])['count'];
-            total += price * quantity;
-          }
-        }
-
         if (data.size < 1) {
-          return VoidList(textStyle: textStyle, numberTable: numberTable);
+          return VoidList(
+              textStyle: textStyle, numberTable: numberTable, data: data);
         } else {
           return FullList(
             length: length,
             data: data,
-            total: total,
             textStyle: textStyle,
             numberTable: numberTable,
           );
@@ -210,19 +198,43 @@ class FullList extends StatelessWidget {
     Key? key,
     required this.length,
     required this.data,
-    required this.total,
     required this.textStyle,
     required this.numberTable,
   }) : super(key: key);
 
   final length;
   final QuerySnapshot<Object?> data;
-  final int total;
+
   final TextStyle textStyle;
   final int numberTable;
 
   @override
   Widget build(BuildContext context) {
+    int total = 0;
+    var products = jsonDecode(data.docs[0]['products']);
+
+    for (var element in products) {
+      var decode = jsonDecode(element);
+
+      var model = Product(
+          count: decode['count'],
+          name: decode['name'],
+          price: decode['price'],
+          image: decode['image']);
+      var i = productList.indexWhere((e) => e.name == model.name);
+      if (i < 0) {
+        productList.add(model);
+      }
+    }
+
+    if (data.size > 0) {
+      for (var i = 0; i < productList.length; i++) {
+        final int price = productList[i].price;
+        final int quantity = productList[i].count;
+        total += price * quantity;
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 20),
@@ -232,15 +244,12 @@ class FullList extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.builder(
-                itemCount: length,
+                itemCount: productList.length,
                 itemBuilder: ((context, index) {
-                  final products = jsonDecode(data.docs[0]['products']);
-
-                  final productName = (jsonDecode(products[index])['name']);
-
-                  final int price = (jsonDecode(products[index])['price']);
-                  final int quantity = (jsonDecode(products[index])['count']);
-                  final String image = (jsonDecode(products[index])['image']);
+                  final productName = productList[index].name;
+                  final int price = productList[index].price;
+                  final int quantity = productList[index].count;
+                  final String image = productList[index].image;
 
                   return ListTile(
                     leading: Container(
@@ -292,17 +301,34 @@ class FullList extends StatelessWidget {
                     message: '¿Está seguro(a) de pagar el pedido?',
                     text: 'Pagar',
                     payBotton: true,
+                    editBotton: false,
+                    orderBotton: false,
+                    data: data,
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: OrderButton(
-                    price: total,
-                    numberTable: numberTable,
-                    message: 'Pedido realizado',
-                    text: 'Pedir',
-                    payBotton: false,
-                  ),
+                  child: length <= 0
+                      ? OrderButton(
+                          price: total,
+                          numberTable: numberTable,
+                          message: 'Pedido realizado',
+                          text: 'Pedir',
+                          payBotton: false,
+                          editBotton: false,
+                          orderBotton: true,
+                          data: data,
+                        )
+                      : OrderButton(
+                          price: total,
+                          numberTable: numberTable,
+                          message: 'Pedido realizado',
+                          text: 'Editar',
+                          payBotton: false,
+                          editBotton: true,
+                          orderBotton: false,
+                          data: data,
+                        ),
                 ),
                 const SizedBox(width: 20),
                 const Text('Total',
@@ -326,10 +352,12 @@ class VoidList extends StatelessWidget {
     Key? key,
     required this.textStyle,
     required this.numberTable,
+    required this.data,
   }) : super(key: key);
 
   final TextStyle textStyle;
   final int numberTable;
+  final QuerySnapshot<Object?> data;
 
   @override
   Widget build(BuildContext context) {
@@ -402,15 +430,6 @@ class VoidList extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 const SizedBox(width: 10),
-                Expanded(
-                  child: OrderButton(
-                    price: total,
-                    numberTable: numberTable,
-                    message: '¿Está seguro(a) de pagar el pedido?',
-                    text: 'Pagar',
-                    payBotton: true,
-                  ),
-                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: OrderButton(
@@ -419,6 +438,9 @@ class VoidList extends StatelessWidget {
                     message: 'Pedido realizado',
                     text: 'Pedir',
                     payBotton: false,
+                    editBotton: false,
+                    orderBotton: true,
+                    data: data,
                   ),
                 ),
                 const SizedBox(width: 20),
