@@ -88,64 +88,41 @@ Widget firstViewTabBarView(
                 final int price = data.docs[index]['price'];
                 final String image = data.docs[index]['image'];
                 return GestureDetector(
-                  onTap: () {
-                    showModalBottom(context, productName, price, image);
-                  },
-                  child: Card(
-                    elevation: 10,
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 115,
+                    onTap: () =>
+                        showModalBottom(context, productName, price, image),
+                    child: Card(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Image(
                               image: NetworkImage(image),
                               fit: BoxFit.fitHeight,
+                              height: 120,
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                )),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 15),
-                              child: Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      productName,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text('\$$price',
-                                        style: const TextStyle(fontSize: 15)),
-                                  ],
-                                ),
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              productName,
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                  ),
-                );
+                          const SizedBox(height: 5),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text('\$$price',
+                                style: const TextStyle(fontSize: 15)),
+                          ),
+                        ],
+                      ),
+                    ));
               }),
             ),
 
@@ -252,16 +229,11 @@ class FullList extends StatelessWidget {
                   final String image = productList[index].image;
 
                   return ListTile(
-                    leading: Container(
+                    leading: SizedBox(
                         width: 50,
                         height: 70,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5))),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(2),
                           child: Image(
                             image: NetworkImage(image),
                             fit: BoxFit.fitHeight,
