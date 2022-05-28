@@ -231,13 +231,9 @@ class FullList extends StatelessWidget {
                   return ListTile(
                     leading: SizedBox(
                         width: 50,
-                        height: 70,
-                        child: Padding(
-                          padding: const EdgeInsets.all(2),
-                          child: Image(
-                            image: NetworkImage(image),
-                            fit: BoxFit.fitHeight,
-                          ),
+                        child: Image(
+                          image: NetworkImage(image),
+                          fit: BoxFit.fitHeight,
                         )),
                     title: Text(
                       productName,
@@ -360,20 +356,11 @@ class VoidList extends StatelessWidget {
                   final String image = productList[index].image;
 
                   return ListTile(
-                    leading: Container(
+                    leading: SizedBox(
                         width: 50,
-                        height: 70,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image(
-                            image: NetworkImage(image),
-                            fit: BoxFit.fitHeight,
-                          ),
+                        child: Image(
+                          image: NetworkImage(image),
+                          fit: BoxFit.fitHeight,
                         )),
                     title: Text(
                       productName,
