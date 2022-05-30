@@ -54,6 +54,8 @@ class OrderButton extends StatelessWidget {
             db
                 .collection("pedidos")
                 .where('table', isEqualTo: '${numberTable + 1}')
+                .where('busy', isEqualTo: true)
+                .where('paidOut', isEqualTo: false)
                 .get()
                 .then((value) => value.docs.forEach((element) {
                       db
