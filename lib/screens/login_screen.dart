@@ -113,7 +113,8 @@ class _LoginFormState extends State<LoginForm> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      snackBar(context, 'Bienvenido(a)');
+      final user = FirebaseAuth.instance.currentUser!;
+      snackBar(context, 'Bienvenido(a) ${user.email}');
     } on FirebaseAuthException catch (e) {
       // print(e.code);
       if (e.code == 'unknown') {

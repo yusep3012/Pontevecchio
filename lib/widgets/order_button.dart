@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+// UID
 import 'package:uuid/uuid.dart';
 
 // Widgets
@@ -33,6 +36,7 @@ class OrderButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var uuid = const Uuid();
     var db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser!;
 
     return ElevatedButton(
         style: ElevatedButton.styleFrom(primary: const Color(0xff2E305F)),
@@ -69,7 +73,7 @@ class OrderButton extends StatelessWidget {
                 "id": uuid.v4(),
                 "table": '${numberTable + 1}',
                 "products": jsonEncode(productList),
-                "waiter": 'Yusep',
+                "waiter": '${user.email}',
                 "busy": true, //Cambiar a false
                 "paidOut": false, //Cambiar a true
               };
