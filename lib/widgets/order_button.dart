@@ -57,6 +57,10 @@ class OrderButton extends StatelessWidget {
                           .doc(element.id)
                           .update({"products": jsonEncode(productList)});
                     }));
+
+            snackBar(context, 'Pedido editado');
+
+            Navigator.pushReplacementNamed(context, '/table_list_screen');
           }
 
           if (orderBotton) {
@@ -74,7 +78,9 @@ class OrderButton extends StatelessWidget {
                   (DocumentReference doc) =>
                       print('DocumentSnapshot added with ID: ${doc.id}'));
 
-              productList.removeRange(0, productList.length);
+              snackBar(context, 'Pedido realizado');
+
+              Navigator.pushReplacementNamed(context, '/table_list_screen');
             }
           }
 

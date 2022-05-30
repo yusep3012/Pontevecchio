@@ -50,6 +50,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -67,18 +68,21 @@ class _LoginFormState extends State<LoginForm> {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 50),
-      child: Column(
-        children: [
-          InputEmail(
-              emailController: _emailController,
-              styleUnderlineInputBorder: styleUnderlineInputBorder),
-          const SizedBox(height: 15),
-          InputPassword(
-              passwordController: _passwordController,
-              styleUnderlineInputBorder: styleUnderlineInputBorder),
-          const Register(),
-          buttonSignIn(),
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            InputEmail(
+                emailController: _emailController,
+                styleUnderlineInputBorder: styleUnderlineInputBorder),
+            const SizedBox(height: 15),
+            InputPassword(
+                passwordController: _passwordController,
+                styleUnderlineInputBorder: styleUnderlineInputBorder),
+            const Register(),
+            buttonSignIn(),
+          ],
+        ),
       ),
     );
   }
@@ -103,13 +107,30 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void signIn() async {
+    _formKey.currentState!.validate();
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      snackBar(context, 'Bienvenido(a)');
     } on FirebaseAuthException catch (e) {
-      snackBar(context, 'Fallo al autenticar');
+      // print(e.code);
+      if (e.code == 'unknown') {
+        snackBar(context, 'Por favor rellenar el formulario');
+      }
+
+      if (e.code == 'wrong-password') {
+        snackBar(context, 'Contraseña errónea');
+      }
+
+      if (e.code == 'user-not-found') {
+        snackBar(context, 'Cuenta no existente');
+      }
+
+      if (e.code == 'invalid-email') {
+        snackBar(context, 'Correo electrónico no válido');
+      }
     }
   }
 }

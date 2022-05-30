@@ -23,7 +23,10 @@ class TablesScreen extends StatelessWidget {
             title: const Text('Listado de las mesas'),
             actions: [
               IconButton(
-                  onPressed: () => FirebaseAuth.instance.signOut(),
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                    snackBar(context, 'Sesión cerrada');
+                  },
                   icon: const Icon(Icons.logout_outlined))
             ],
           ),

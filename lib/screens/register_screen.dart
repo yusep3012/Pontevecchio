@@ -103,8 +103,8 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void signUp() async {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) return;
+    _formKey.currentState!.validate();
+
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
@@ -113,7 +113,22 @@ class _RegisterFormState extends State<RegisterForm> {
       snackBar(context, 'Usuario registrado');
       Navigator.pushNamed(context, '/login_screen');
     } on FirebaseAuthException catch (e) {
-      print(e);
+      // print(e.code);
+      if (e.code == 'unknown') {
+        snackBar(context, 'Por favor rellenar el formulario');
+      }
+
+      if (e.code == 'email-already-in-use') {
+        snackBar(context, 'El correo se encuentra en uso');
+      }
+
+      if (e.code == 'invalid-email') {
+        snackBar(context, 'Correo electrónico no válido');
+      }
+
+      if (e.code == 'weak-password') {
+        snackBar(context, 'Contraseña errónea');
+      }
     }
   }
 }
