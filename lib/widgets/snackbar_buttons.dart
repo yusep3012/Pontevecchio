@@ -7,8 +7,8 @@ import 'package:pontevecchio/models/models.dart';
 // Widgets
 import 'package:pontevecchio/widgets/widgets.dart';
 
-// List<Map<String, dynamic>> productList = [];
 List<Product> productList = [];
+List<Product> productList2 = [];
 
 class Bottons extends StatefulWidget {
   const Bottons({
@@ -124,9 +124,16 @@ class _BottonsState extends State<Bottons> {
           name: widget.productName,
           price: widget.price,
           image: widget.image));
+      productList2.add(Product(
+          count: 0,
+          name: widget.productName,
+          price: widget.price,
+          image: widget.image));
+
       snackBar(context, 'Producto agregado');
       Navigator.pop(context);
     } else {
+      snackBar(context, 'Cantidad errada');
       Navigator.pop(context);
     }
 
@@ -143,13 +150,15 @@ class _BottonsState extends State<Bottons> {
       productList
           .removeWhere((element) => element.name == (widget.productName));
 
+      var i = productList2.indexWhere((e) => e.name == widget.productName);
+
       productList.add(Product(
           count: newQuantity,
           name: widget.productName,
           price: widget.price,
           image: widget.image));
-    } else {
-      snackBar(context, 'Cantidad errada');
+
+      productList2[i].count += quantity;
     }
   }
 }

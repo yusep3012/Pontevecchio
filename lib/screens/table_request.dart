@@ -199,8 +199,11 @@ class FullList extends StatelessWidget {
           price: decode['price'],
           image: decode['image']);
       var i = productList.indexWhere((e) => e.name == model.name);
+      var i2 = productList2.indexWhere((e) => e.name == model.name);
       if (i < 0) {
         productList.add(model);
+      } else if (i2 >= 0 && i >= 0) {
+        productList[i].count = productList2[i2].count + model.count;
       }
     }
 

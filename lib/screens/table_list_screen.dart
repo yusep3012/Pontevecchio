@@ -91,6 +91,7 @@ class TablesList extends StatelessWidget {
                       trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                       onTap: () {
                         productList.removeRange(0, productList.length);
+                        productList2.removeRange(0, productList2.length);
 
                         Navigator.push(
                           context,
