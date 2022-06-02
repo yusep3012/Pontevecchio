@@ -8,8 +8,8 @@ Future<dynamic> dialogConfirmation(
   String message,
   String routeName,
   bool pay,
-  int? price,
-  String? idDocumentFirebase,
+  int price,
+  String idDocumentFirebase,
 ) {
   var db = FirebaseFirestore.instance;
 
