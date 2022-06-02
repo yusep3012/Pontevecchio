@@ -65,6 +65,16 @@ Widget firstViewTabBarView(
   final Stream<QuerySnapshot> products =
       FirebaseFirestore.instance.collection('productos').snapshots();
 
+  final Orientation orientation = MediaQuery.of(context).orientation;
+  late Size size = MediaQuery.of(context).size;
+  late int cardsNumber = 2;
+  late double height = 118;
+
+  if (orientation == Orientation.landscape) {
+    cardsNumber = 3;
+    height = size.width * 0.227;
+  }
+
   return StreamBuilder<QuerySnapshot>(
       stream: products,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -82,7 +92,7 @@ Widget firstViewTabBarView(
           padding: const EdgeInsets.only(left: 5, top: 75, right: 5),
           child: TabBarView(children: [
             GridView.count(
-              crossAxisCount: 2,
+              crossAxisCount: cardsNumber,
               children: List.generate(data.size, (index) {
                 final String productName = data.docs[index]['name'];
                 final int price = data.docs[index]['price'];
@@ -97,13 +107,14 @@ Widget firstViewTabBarView(
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            padding: const EdgeInsets.only(top: 8.0),
                             child: Image(
                               image: NetworkImage(image),
                               fit: BoxFit.fitHeight,
-                              height: 120,
+                              height: height,
                             ),
                           ),
+                          const Spacer(),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(

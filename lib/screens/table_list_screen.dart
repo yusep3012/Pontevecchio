@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // Screens
@@ -24,8 +23,14 @@ class TablesScreen extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                    snackBar(context, 'Sesión cerrada');
+                    dialogConfirmation(
+                      context,
+                      '¿Está seguro(a) de cerrar sesión?',
+                      '',
+                      false,
+                      0,
+                      '',
+                    );
                   },
                   icon: const Icon(Icons.logout_outlined))
             ],

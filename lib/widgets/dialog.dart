@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pontevecchio/widgets/widgets.dart';
 
 Future<dynamic> dialogConfirmation(
   BuildContext context,
   String message,
   String routeName,
-  bool answer,
-  int price,
-  String idDocumentFirebase,
+  bool pay,
+  int? price,
+  String? idDocumentFirebase,
 ) {
   var db = FirebaseFirestore.instance;
 
@@ -35,7 +37,7 @@ Future<dynamic> dialogConfirmation(
                 )),
             TextButton(
                 onPressed: () {
-                  if (answer) {
+                  if (pay) {
                     db
                         .collection("pedidos")
                         .doc(idDocumentFirebase)
@@ -43,7 +45,11 @@ Future<dynamic> dialogConfirmation(
 
                     Navigator.pushNamed(context, routeName,
                         arguments: {'price': price});
-                  } else {
+                  }
+
+                  if (!pay) {
+                    FirebaseAuth.instance.signOut();
+                    snackBar(context, 'Sesión cerrada');
                     Navigator.pop(context);
                   }
                 },
