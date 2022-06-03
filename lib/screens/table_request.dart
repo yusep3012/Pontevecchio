@@ -68,11 +68,11 @@ Widget firstViewTabBarView(
   final Orientation orientation = MediaQuery.of(context).orientation;
   late Size size = MediaQuery.of(context).size;
   late int cardsNumber = 2;
-  late double height = 118;
+  late double height = 115;
 
   if (orientation == Orientation.landscape) {
     cardsNumber = 3;
-    height = size.width * 0.227;
+    height = size.width * 0.225;
   }
 
   return StreamBuilder<QuerySnapshot>(
@@ -97,6 +97,7 @@ Widget firstViewTabBarView(
                 final String productName = data.docs[index]['name'];
                 final int price = data.docs[index]['price'];
                 final String image = data.docs[index]['image'];
+
                 return GestureDetector(
                     onTap: () =>
                         showModalBottom(context, productName, price, image),
