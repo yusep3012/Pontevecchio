@@ -168,22 +168,17 @@ Widget secondPageTabBarView(TextStyle textStyle, int numberTable) {
         final length =
             data.size > 0 ? jsonDecode(data.docs[0]['products']).length : 0;
 
-        if (data.size < 1) {
-          return VoidList(
-              textStyle: textStyle, numberTable: numberTable, data: data);
-        } else {
-          return FullList(
-            length: length,
-            data: data,
-            textStyle: textStyle,
-            numberTable: numberTable,
-          );
-        }
+        return OrderList(
+          length: length,
+          data: data,
+          textStyle: textStyle,
+          numberTable: numberTable,
+        );
       });
 }
 
-class FullList extends StatelessWidget {
-  const FullList({
+class OrderList extends StatelessWidget {
+  const OrderList({
     Key? key,
     required this.length,
     required this.data,
@@ -191,7 +186,7 @@ class FullList extends StatelessWidget {
     required this.numberTable,
   }) : super(key: key);
 
-  final length;
+  final int length;
   final QuerySnapshot<Object?> data;
 
   final TextStyle textStyle;
@@ -200,30 +195,39 @@ class FullList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int total = 0;
-    var products = jsonDecode(data.docs[0]['products']);
-
-    for (var element in products) {
-      var decode = jsonDecode(element);
-
-      var model = Product(
-          count: decode['count'],
-          name: decode['name'],
-          price: decode['price'],
-          image: decode['image']);
-      var i = productList.indexWhere((e) => e.name == model.name);
-      var i2 = productList2.indexWhere((e) => e.name == model.name);
-      if (i < 0) {
-        productList.add(model);
-      } else if (i2 >= 0 && i >= 0) {
-        productList[i].count = productList2[i2].count + model.count;
-      }
-    }
 
     if (data.size > 0) {
-      for (var i = 0; i < productList.length; i++) {
-        final int price = productList[i].price;
-        final int quantity = productList[i].count;
-        total += price * quantity;
+      var products = jsonDecode(data.docs[0]['products']);
+
+      for (var element in products) {
+        var decode = jsonDecode(element);
+
+        var model = Product(
+            count: decode['count'],
+            name: decode['name'],
+            price: decode['price'],
+            image: decode['image']);
+        var i = productList.indexWhere((e) => e.name == model.name);
+        var i2 = productList2.indexWhere((e) => e.name == model.name);
+        if (i < 0) {
+          productList.add(model);
+        } else if (i2 >= 0 && i >= 0) {
+          productList[i].count = productList2[i2].count + model.count;
+        }
+
+        for (var i = 0; i < productList.length; i++) {
+          final int price = productList[i].price;
+          final int quantity = productList[i].count;
+          total += price * quantity;
+        }
+      }
+    } else {
+      if (productList.isNotEmpty) {
+        for (var i = 0; i < productList.length; i++) {
+          final int price = productList[i].price;
+          final int quantity = productList[i].count;
+          total += price * quantity;
+        }
       }
     }
 
@@ -264,8 +268,7 @@ class FullList extends StatelessWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: 1,
                       children: [
-                        Text('\$${price * quantity}', style: textStyle),
-                        // const IconButtonDelete(price: 2000),
+                        Text('\$${price * quantity}', style: textStyle)
                       ],
                     ),
                   );
@@ -277,146 +280,45 @@ class FullList extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 const SizedBox(width: 10),
-                Expanded(
-                  child: OrderButton(
+                if (length <= 0)
+                  Expanded(
+                      child: OrderButton(
                     price: total,
                     numberTable: numberTable,
-                    message: '¿Está seguro(a) de pagar el pedido?',
-                    text: 'Pagar',
-                    payBotton: true,
-                    editBotton: false,
-                    orderBotton: false,
-                    data: data,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: length <= 0
-                      ? OrderButton(
-                          price: total,
-                          numberTable: numberTable,
-                          message: 'Pedido realizado',
-                          text: 'Pedir',
-                          payBotton: false,
-                          editBotton: false,
-                          orderBotton: true,
-                          data: data,
-                        )
-                      : OrderButton(
-                          price: total,
-                          numberTable: numberTable,
-                          message: 'Pedido realizado',
-                          text: 'Editar',
-                          payBotton: false,
-                          editBotton: true,
-                          orderBotton: false,
-                          data: data,
-                        ),
-                ),
-                const SizedBox(width: 20),
-                const Text('Total',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 19)),
-                const SizedBox(width: 8),
-                Text('\$$total',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 19)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class VoidList extends StatelessWidget {
-  const VoidList({
-    Key? key,
-    required this.textStyle,
-    required this.numberTable,
-    required this.data,
-  }) : super(key: key);
-
-  final TextStyle textStyle;
-  final int numberTable;
-  final QuerySnapshot<Object?> data;
-
-  @override
-  Widget build(BuildContext context) {
-    int total = 0;
-
-    if (productList.isNotEmpty) {
-      for (var i = 0; i < productList.length; i++) {
-        final int price = productList[i].price;
-        final int quantity = productList[i].count;
-        total += price * quantity;
-      }
-    }
-
-    return Container(
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.only(left: 0, top: 20, right: 0, bottom: 20),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-                itemCount: productList.length,
-                itemBuilder: ((context, index) {
-                  final String productName = productList[index].name;
-                  final int price = productList[index].price;
-                  final int quantity = productList[index].count;
-                  final String image = productList[index].image;
-
-                  return ListTile(
-                    leading: SizedBox(
-                        width: 50,
-                        child: Image(
-                          image: NetworkImage(image),
-                          fit: BoxFit.fitHeight,
-                        )),
-                    title: Text(
-                      productName,
-                      style: textStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      'Cantidad: $quantity',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    trailing: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 1,
-                      children: [
-                        Text('\$${price * quantity}', style: textStyle),
-                        // const IconButtonDelete(price: 2000),
-                      ],
-                    ),
-                  );
-                })),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const SizedBox(width: 10),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: OrderButton(
-                    price: total,
-                    numberTable: numberTable,
-                    message: 'Pedido realizado',
+                    message: '',
                     text: 'Pedir',
                     payBotton: false,
                     editBotton: false,
                     orderBotton: true,
                     data: data,
+                  )),
+                if (length > 0)
+                  Expanded(
+                    child: OrderButton(
+                      price: total,
+                      numberTable: numberTable,
+                      message: '¿Está seguro(a) de pagar el pedido?',
+                      text: 'Pagar',
+                      payBotton: true,
+                      editBotton: false,
+                      orderBotton: false,
+                      data: data,
+                    ),
                   ),
-                ),
+                if (length > 0) const SizedBox(width: 10),
+                if (length > 0)
+                  Expanded(
+                    child: OrderButton(
+                      price: total,
+                      numberTable: numberTable,
+                      message: '',
+                      text: 'Editar',
+                      payBotton: false,
+                      editBotton: true,
+                      orderBotton: false,
+                      data: data,
+                    ),
+                  ),
                 const SizedBox(width: 20),
                 const Text('Total',
                     style:
